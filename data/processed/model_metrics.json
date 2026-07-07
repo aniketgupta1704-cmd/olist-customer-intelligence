@@ -1,0 +1,89 @@
+{
+  "_provenance": "Values computed in project notebooks 03-05; stored here for the dashboard. Segmentation metrics recomputed from customer_segments.csv; prediction & causal from notebook runs.",
+  "segmentation": {
+    "n_clusters": 4,
+    "n_customers": 93358,
+    "silhouette": 0.3565,
+    "davies_bouldin": 0.8505,
+    "chosen_k_note": "k=4 chosen over silhouette-optimal k=3 to balance statistical separation against business actionability.",
+    "algo_note": "KMeans beat Agglomerative (0.356 vs 0.332) and OPTICS (unsuited to this feature space). Numeric RFM features only \u2014 geography/category tested and excluded as non-discriminative."
+  },
+  "prediction": {
+    "model": "Random Forest \u2014 first-order features only (leakage firewall)",
+    "binary": {
+      "target": "High-value (High-Value One-Timers + Repeat Buyers)",
+      "roc_auc": 0.9688,
+      "precision_high_value": 0.89,
+      "recall_high_value": 0.94,
+      "f1_high_value": 0.91,
+      "confusion_matrix": [
+        [
+          13842,
+          1042
+        ],
+        [
+          507,
+          7949
+        ]
+      ],
+      "cm_labels": [
+        "not high-value",
+        "high-value"
+      ],
+      "cm_note": "Approximate CM reconstructed from reported precision/recall on 23,340 test rows."
+    },
+    "multiclass": {
+      "macro_ovr_auc": 0.8526,
+      "accuracy": 0.81,
+      "per_class": {
+        "Dormant Low-Value": {
+          "precision": 0.76,
+          "recall": 0.56,
+          "f1": 0.64
+        },
+        "High-Value One-Timers": {
+          "precision": 0.87,
+          "recall": 0.99,
+          "f1": 0.93
+        },
+        "Low-Value Recent": {
+          "precision": 0.79,
+          "recall": 0.9,
+          "f1": 0.84
+        },
+        "Repeat Buyers": {
+          "precision": 0.2,
+          "recall": 0.01,
+          "f1": 0.02
+        }
+      }
+    },
+    "key_finding": "Spend level is predictable from the first order; REPEAT BEHAVIOR is not (Repeat Buyers recall 1%). Loyalty can't be forecast at acquisition \u2014 this motivated the causal inference layer."
+  },
+  "causal": {
+    "method": "Propensity Score Matching (1:1 nearest neighbor, caliper 0.01)",
+    "treatment": "Delivered 3+ days earlier than estimated",
+    "outcome": "Review score (1-5)",
+    "n_treated": 85173,
+    "n_control": 7661,
+    "naive_diff": 1.7332,
+    "att": 1.7293,
+    "t_stat": 251.88,
+    "p_value_note": "p < 1e-300 (effectively 0)",
+    "smd_before": {
+      "n_items": 0.063,
+      "items_value": -0.049,
+      "freight_value": -0.083,
+      "estimated_days": 0.263,
+      "order_month": 0.084
+    },
+    "smd_after": {
+      "n_items": -0.002,
+      "items_value": -0.048,
+      "freight_value": -0.05,
+      "estimated_days": 0.015,
+      "order_month": -0.099
+    },
+    "caveat": "ATT is an UPPER BOUND \u2014 review scores partly reflect delivery timing directly (treatment-outcome coupling PSM cannot remove). Direction is robust; exact magnitude is overstated."
+  }
+}

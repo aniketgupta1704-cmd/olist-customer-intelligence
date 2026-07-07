@@ -1,0 +1,19 @@
+# Data — raw files and the DuckDB are large / regenerable
+data/raw/
+data/processed/*.duckdb
+
+# Secrets
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+.vscode/
+*.swp
