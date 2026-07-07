@@ -2,7 +2,7 @@
 
 An end-to-end customer analytics system built on the [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (~96k orders across 9 relational tables). The project moves from raw multi-table data through segmentation, predictive modeling, and causal inference to a deployed decision tool — with an emphasis on **honest methodology** over inflated metrics.
 
-**Live dashboard:** _[deploy in progress — link coming soon]_
+**Live dashboard:** https://olist-customer-intelligence-dh5g93dk9z5sberappgzdoj.streamlit.app/
 **Repository:** https://github.com/aniketgupta1704-cmd/olist-customer-intelligence
 
 ![Home](docs/images/Home.png)
